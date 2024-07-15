@@ -91,7 +91,85 @@
     transform: translate(0, 0);
     box-shadow: 2px 2px var(--dark);
   }
+
+
+  .box {
+    display: inline-block;
+    flex: auto;
+    width: 100px;
+    height: 200px;
+    background-color: blue;
+    margin: 5px;
+    color: rgb(223, 217, 217);
+}
+
+#five-day-weather {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+  /* Place holder for five day forecast  */
+  #sub-five-day-weather-container {
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: space-evenly;    /* background-color: var(--primary); */
+    background-color: rgb(53, 129, 81);
+    /* margin: 10px; */
+    color: red;
+    /* height: 100px;
+    display: flex;
+    background-color: var(--dark);
+    color: white; */
+  }  
   
+  /* Place holder for five day forecast  */
+  #small-one-day-weather-container {
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: space-evenly;    /* background-color: var(--primary); */
+    background-color: rgb(53, 129, 81);
+    /* margin: 10px; */
+    color: red;
+    /* height: 100px;
+    display: flex;
+    background-color: var(--dark);
+    color: white; */
+  }  
+  
+  
+  /* Place holder for one day forecast Date */
+  #sub-one-day-date-container {
+    width: 100px;
+    height:20%;
+    background-color: blue;
+    text-emphasis-color: black;
+    /* margin: 10px; */
+    
+    /* flex: 15%; */
+    /* display: flex; */
+    /* height: 100%;
+    width: 30%;
+    background-color: var(--dark); */
+    /* color: white; */
+  }  
+  /* Place holder for one day forecast Icon */
+  #sub-one-day-icon-container {
+    /* flex: 15%; */
+    width: 100px;
+    height:20%;
+    text-emphasis-color: black;
+    background-color: green;
+  }
+  #sub-one-day-weather-container {
+    width: 100px;
+    height:60%;
+    background-color: rgb(187, 176, 176);
+    text-emphasis-color: black;
+  }
   .hero {
     padding: 3% 1%;
     height: 150px;

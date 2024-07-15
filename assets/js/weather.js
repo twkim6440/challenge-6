@@ -5,6 +5,7 @@ const oneDayCityWeatherContainerEl = document.querySelector('#one-day-weather-co
 const fiveDayCityWeatherContainerEl = document.querySelector('#five-day-weather-container');
 const cityContainerEl = document.querySelector('#cities-container');
 const oneDayWeatherCity = document.querySelector('#one-day-weather');
+const fieDayWeatherCity = document.querySelector('#five-day-weather');
 
 const cityArray = JSON.parse(localStorage.getItem('cityName')) || [];
 
@@ -14,12 +15,9 @@ const formSubmitHandler = function (event) {
 
   if (cityName) {
 
-       displayCities(cityArray, cityName);
-  // displayWeathers(cityArray, cityName);
-    // getCityWeather(cityName);
-
-    // cityContainerEl.textContent = '';
-    nameInputEl.value = '';
+    displayCities(cityArray, cityName);
+    displayFiveDayWeathers(cityArray, cityName);
+    // nameInputEl.value = '';
   } else {
     alert('Please enter a cityName');
   }
@@ -40,69 +38,6 @@ const buttonClickHandler = function (event) {
   }
 };
 
-// const getCityWeather = function (cityName) {
-//   // alert('chk #1  *** City Name:   ' + cityName);
-//   // const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
-//   // let tmpCityName = cityName;
-//   // const apiDataUrl = `https://api.openweathermap.org/data/2.5/weather?q=${tmpCityName}&appid=${apiKey}`;
-//   // // const cityLatLonUrl = `http://api.openweathermap.org/geo/1.0/direct?q=Seoul&limit=5&appid=765e5437056c425c7ec2a06e41de5624`;
-
-//   // fetch(apiDataUrl)
-//   //   .then(function (response) {
-//   //     if (response.ok) {
-//   //       alert('fech: ');
-//   //       response.json().then(function (cityArray) {
-//   //         // displayCities(cityArray, cityName);
-//   //         displayWeathers(cityArray, cityName);
-//   //         // getGeoCoordinate(cityArray, cityName);
-//   //       });
-//   //     } else {
-//   //       alert(`Error:${response.statusText}`);
-//   //     }
-//   //   })
-//   //   .catch(function (error) {
-//   //     alert('Unable to connect to Open Weather Map');
-//   //   });
-//   }
-
-  // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=ecf8cbf60d320509daea3c498aa4334b`;
-  // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=ecf8cbf60d320509daea3c498aa4334b`;
-  // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=cityName&appid=ecf8cbf60d320509daea3c498aa4334b`;
-  // const apiUrl = `https://api.github.com/users/${user}/repos`;
-  // https://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={API key}
-  // alert('chk #2   City Name:   ' + cityName);
-  // fetch(apiUrl)
-  //   .then(function (response) {
-  //     if (response.ok) {
-  //       response.json().then(function (cityArray) {
-  //         displayWeathers(cityArray, cityName);
-  //       });
-  //     } else {
-  //       alert(`Error:${response.statusText}`);
-  //     }
-  //   })
-  //   .catch(function (error) {
-  //     alert('Unable to connect to Open Weather Map');
-  //   });
-// };
-
-// const getCityWeather = function (user) {
-//   const apiUrl = `https://api.github.com/users/${user}/repos`;
-
-//   fetch(apiUrl)
-//     .then(function (response) {
-//       if (response.ok) {
-//         response.json().then(function (data) {
-//           displayRepos(data, user);
-//         });
-//       } else {
-//         alert(`Error:${response.statusText}`);
-//       }
-//     })
-//     .catch(function (error) {
-//       alert('Unable to connect to GitHub');
-//     });
-// };
 
 const getFeaturedRepos = function (language) {
   const apiUrl = `https://api.github.com/search/repositories?q=${language}+is:featured&sort=help-wanted-issues`;
@@ -131,11 +66,12 @@ const displayCities = function (cityArray, cityName) {
   // cityNameEl.style.color = black;
   cityContainerEl.appendChild(cityNameEl);
 
-  displayWeathers(cityArray, cityName);
+  displayOneDayWeather(cityArray, cityName);
+  displayFiveDayWeathers(cityArray, cityName);
 
 };
 
-const displayWeathers = function (cityArray, cityName) {
+const displayOneDayWeather = function (cityArray, cityName) {
   if (cityArray.length === 0) {
     oneDayWeatherCity.textContent = 'No repositories found.';
     return;
@@ -153,18 +89,39 @@ const displayWeathers = function (cityArray, cityName) {
         .then(function (fetchedData) {
 
           // alert('chk1...! Fetched Data.Name:   '+fetchedData.name);
-          const container = document.getElementById('one-day-weather-container');
-          container.innerHTML = "";
+          const oneDayContainer = document.getElementById('one-day-weather-container');
+          oneDayContainer.innerHTML = "";
           const tmpIcon = document.getElementById('icon-container');
           tmpIcon.innerHTML = "";
           
           // Due to time limit, only two types of icons are implemented (Clear & Cloud)
+
+          // document.getElementById('icon-container').appendChild(icon);
+
+          // DISPLAY City Name
+          const cityNameDataElement = document.createElement('p');
+          // cityNameDataElement.style.fontSize = '25px';
+          // cityNameDataElement.style.fontWeight  = 'bold';
+          cityNameDataElement.textContent = cityName;
+          // oneDayContainer.appendChild(cityNameDataElement);
+          
+          // DISPLAY Date  
+          let today  = new Date();
+          let day = today.getDate();
+          let month = today.getMonth()+1;
+          let year = today.getFullYear();
+          const dateElement = document.createElement('p');
+          dateElement.style.fontSize = '30px';
+          dateElement.style.fontWeight  = 'bold';
+          dateElement.textContent = fetchedData.name+" ("+`${month}/${day}/${year}`+")";
+          oneDayContainer.appendChild(dateElement);
+          
+          // DISPLAY Icon
           const iconToBeDisplayed = document.querySelector('#icon-container');
           const icon = document.createElement('i');
-          icon.style.fontSize = '110px';
+          icon.style.fontSize = '50px';
 
           let tmpWeather = fetchedData.weather[0].main;
-          alert('tmpWeather = ' + tmpWeather);
           if (tmpWeather == "Clear") {         // Clear, Clouds, Drizzle, Mist, etc. 
           icon.classList.add('fas', 'fa-sun');
           icon.style.color = 'orange';
@@ -172,34 +129,20 @@ const displayWeathers = function (cityArray, cityName) {
             icon.classList.add('fas', 'fa-cloud');
             icon.style.color = 'gray';
           };
-          document.getElementById('icon-container').appendChild(icon);
+          oneDayContainer.appendChild(icon);
 
-
-          const cityNameDataElement = document.createElement('p');
-          cityNameDataElement.style.fontSize = '40px';
-          cityNameDataElement.style.fontWeight  = 'bold';
-
+          // DISPLAY Weather Data: Temp, Wind and Humidity
           const temperatureDataElement = document.createElement('p');
           const windDataElement = document.createElement('p');
           const humidityDataElement = document.createElement('p');
-
-          let today  = new Date();
-          let day = today.getDate();
-          let month = today.getMonth()+1;
-          let year = today.getFullYear();
-
-          cityNameDataElement.textContent = fetchedData.name+" ("+`${month}/${day}/${year}`+")";
-
-          
 
           temperatureDataElement.textContent = "Temp: "+fetchedData.main.temp+" FH";
           windDataElement.textContent = "Wind: "+fetchedData.wind.speed+" MPH";
           humidityDataElement.textContent = "Humidity: "+fetchedData.main.humidity+" %";
 
-          container.appendChild(cityNameDataElement);
-          container.appendChild(temperatureDataElement);
-          container.appendChild(windDataElement);
-          container.appendChild(humidityDataElement);
+          oneDayContainer.appendChild(temperatureDataElement);
+          oneDayContainer.appendChild(windDataElement);
+          oneDayContainer.appendChild(humidityDataElement);
 
         });
       } else {
@@ -212,7 +155,129 @@ const displayWeathers = function (cityArray, cityName) {
 
   );
 
+};
 
+const displayFiveDayWeathers = function (cityArray, cityName) {
+  if (cityArray.length === 0) {
+    fieDayWeatherCity.textContent = 'No repositories found.';
+    return;
+  }
+  const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
+  let tmpCityName = cityName;
+  const apiForecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${tmpCityName}&appid=${apiKey}&units=imperial`;
+  // const cityLatLonUrl = `http://api.openweathermap.org/geo/1.0/direct?q=Seoul&limit=5&appid=765e5437056c425c7ec2a06e41de5624`;
+
+  fetch(apiForecastDataUrl)
+    .then(function (response) {
+      if (response.ok) {
+        response.json()
+        .then(function (fetchedData) {
+
+          const fiveDayContainer = document.getElementById('sub-five-day-weather-container');
+          fiveDayContainer.innerHTML = "";
+
+          // const tmpIcon = document.getElementById('sub-one-day-icon-container');
+          // tmpIcon.innerHTML = "";
+          
+          // Due to time limit, only two types of icons are implemented (Clear & Cloud)
+
+          for (let i=0; i<5; i++) {
+
+            const box = document.createElement('div');
+            box.classList.add('box');
+            box.textContent = "I'm Here...  # "+i;
+            fiveDayContainer.appendChild(box);
+
+            // Display sub-One-Day Date:
+            const smallOneDayWeatherContainer = document.getElementById('one-day-weather-container');
+            // smallOneDayWeatherContainer.innerHTML = "";
+
+            const tmpDate = document.createElement('p');
+            tmpDate.style.fontSize = '20px';
+            tmpDate.style.fontWeight  = 'bold';
+
+            let today  = new Date();
+            let day = today.getDate();
+            let month = today.getMonth()+1;
+            let year = today.getFullYear();
+            let tmpDay = day+i+1;
+            // alert('Day = '+tmpDay);
+            // let tmpDate = {''};
+            tmpDate.textContent = `${month}/${tmpDay}/${year}`;
+            // smallOneDayWeatherContainer.appendChild(tmpDate);
+            box.appendChild(tmpDate);
+
+
+            // Display sub-One-Day Weather Icon for each Date:
+            const subOneDayIconContainer = document.getElementById('sub-one-day-icon-container');
+
+            const icon = document.createElement('i');
+
+
+            let tmpWeather = fetchedData.list[i].weather[0].main;
+
+            // alert('tmpWeather for '+(i+1)+' Day  = ' + tmpWeather);
+
+            if (tmpWeather == "Clear") {         // Clear, Clouds, Drizzle, Mist, etc. 
+            icon.classList.add('fas', 'fa-sun');
+            icon.style.color = 'orange';
+            } else {
+              icon.classList.add('fas', 'fa-cloud');
+              icon.style.color = 'gray';
+            };
+            // document.getElementById('sub-one-day-icon-container').appendChild(icon);
+            icon.style.fontSize = '40px';
+            box.appendChild(icon);
+
+
+            // document.getElementById('sub-five-day-weather-container').appendChild(tmpDate);
+
+            // alert('CHK '+i+' : ');
+
+              // const temperatureDataElement = document.createElement('p');
+              // temperatureDataElement.style.fontSize = '10px';
+
+              // temperatureDataElement.textContent = "Temp: "+fetchedData.list[i].main.temp+" FH";
+
+              // subOneDayWeatherContainer.appendChild(temperatureDataElement);
+
+
+
+
+              // // document.getElementById('sub-five-day-weather-container').appendChild(subOneDayIcon);
+
+              // // Display sub-One-Day Weather: Temp, Wind and Humidity
+              // const subOneDayWeatherContainer = document.getElementById('sub-one-day-weather-container');
+
+              // const temperatureDataElement = document.createElement('p');
+              // temperatureDataElement.style.fontSize = '10px';
+
+              // const windDataElement = document.createElement('p');
+              // windDataElement.style.fontSize = '10px';
+
+              // const humidityDataElement = document.createElement('p');
+              // humidityDataElement.style.fontSize = '10px';
+
+              // temperatureDataElement.textContent = "Temp: "+fetchedData.list[i].main.temp+" FH";
+              // windDataElement.textContent = "Wind: "+fetchedData.list[i].wind.speed+" MPH";
+              // humidityDataElement.textContent = "Humidity: "+fetchedData.list[i].main.humidity+" %";
+
+              // subOneDayWeatherContainer.appendChild(temperatureDataElement);
+              // subOneDayWeatherContainer.appendChild(windDataElement);
+              // subOneDayWeatherContainer.appendChild(humidityDataElement);
+          }
+
+        });
+      } else {
+        alert(`Error:${response.statusText}`);
+      }
+    })
+    .catch(function (error) {
+      alert('Unable to connect to Open Weather Map');
+    }
+
+  )
+};
   // alert('chk1...!');
   // repoSearchTerm.textContent = searchTerm;
 
@@ -257,7 +322,6 @@ const displayWeathers = function (cityArray, cityName) {
   //   }
 
   // }
-};
 
 userFormEl.addEventListener('submit', formSubmitHandler);
 // languageButtonsEl.addEventListener('click', buttonClickHandler);
