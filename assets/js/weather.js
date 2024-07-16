@@ -23,7 +23,7 @@ const formSubmitHandler = function (event) {
   const newCityName = cityName;
   cityArray.push(newCityName);
   localStorage.setItem('cityName', JSON.stringify(cityArray));
-  nameInputEl.value = '';
+  // nameInputEl.value = '';
 
 };
 
@@ -52,15 +52,25 @@ const getFeaturedRepos = function (language) {
 };
 
 const displayCities = function (cityArray, cityName) {
-  if (cityArray.length === 0) {
-    oneDayCityWeatherContainerEl.textContent = 'No repositories found.';
-    return;
-  }
-  const cityNameEl = document.createElement('a');
+  // if (cityArray.length === 0) {
+  //   oneDayCityWeatherContainerEl.textContent = 'No repositories found.';
+  //   return;
+  // }
+  const cityNameEl = document.createElement('button');
   cityNameEl.classList = 'list-item flex-row justify-center';
   const cityTitleEl = document.createElement('span');
   cityTitleEl.textContent = cityName;
+  cityNameEl.addEventListener('click', function(event){
+  displayOneDayWeather(cityArray, cityName);
+  displayFiveDayWeathers(cityArray, cityName);
+  let currentCity = event.target.innerHTML;
+  displayOneDayWeather(cityArray, currentCity);
+  displayFiveDayWeathers(cityArray, currentCity);
+  }) 
+
   cityNameEl.appendChild(cityTitleEl);
+
+  // console.log(cityNameEl);
   cityContainerEl.appendChild(cityNameEl);
   displayOneDayWeather(cityArray, cityName);
   displayFiveDayWeathers(cityArray, cityName);
@@ -68,10 +78,10 @@ const displayCities = function (cityArray, cityName) {
 
 // 1 Day Weather Data for the entered city: City Name, Date, Weather Icon, Temp, Wind and Humidity.
 const displayOneDayWeather = function (cityArray, cityName) {
-  if (cityArray.length === 0) {
-    oneDayWeatherCity.textContent = 'No repositories found.';
-    return;
-  }
+  // if (cityArray.length === 0) {
+  //   oneDayWeatherCity.textContent = 'No repositories found.';
+  //   return;
+  // }
 
   oneDayCityWeatherContainerEl.innerHTML = "";
   const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
@@ -150,10 +160,10 @@ const displayOneDayWeather = function (cityArray, cityName) {
 
 // 5 Day Forecast for the entered city after today: Date, Weather Icon, Temp, Wind and Humidity.
 const displayFiveDayWeathers = function (cityArray, cityName) {
-  if (cityArray.length === 0) {
-    fiveDayWeatherCity.textContent = 'No repositories found.';
-    return;
-  }
+  // if (cityArray.length === 0) {
+  //   fiveDayWeatherCity.textContent = 'No repositories found.';
+  //   return;
+  // }
   // fiveDayCityWeatherContainerEl.innerHTML = "";
   const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
   let tmpCityName = cityName;
@@ -177,7 +187,7 @@ const displayFiveDayWeathers = function (cityArray, cityName) {
             // Display sub-One-Day Date:
             const smallOneDayWeatherContainer = document.getElementById('one-day-weather-container');
             const tmpDate = document.createElement('p');
-            tmpDate.style.fontSize = '20px';
+            tmpDate.style.fontSize = '15px';
             tmpDate.style.fontWeight  = 'bold';
             tmpDate.style.paddingLeft  = '10px';
             let today  = new Date();
@@ -208,19 +218,19 @@ const displayFiveDayWeathers = function (cityArray, cityName) {
 
             // Display sub-One-Day Weather including Temp, Wind and Humidity:
               const temperatureDataElement = document.createElement('p');
-              temperatureDataElement.style.fontSize = '13px';
+              temperatureDataElement.style.fontSize = '12px';
               temperatureDataElement.style.paddingLeft  = '10px';
               temperatureDataElement.textContent = "Temp: "+fetchedData.list[i].main.temp+" FH";
               box.appendChild(temperatureDataElement);
 
               const windDataElement = document.createElement('p');
-              windDataElement.style.fontSize = '13px';
+              windDataElement.style.fontSize = '12px';
               windDataElement.style.paddingLeft  = '10px';
               windDataElement.textContent = "Wind: "+fetchedData.list[i].wind.speed+" MPH";
               box.appendChild(windDataElement);
               
               const humidityDataElement = document.createElement('p');
-              humidityDataElement.style.fontSize = '13px';
+              humidityDataElement.style.fontSize = '12px';
               humidityDataElement.style.paddingLeft  = '10px';
               humidityDataElement.textContent = "Humidity: "+fetchedData.list[i].main.humidity+" %";
               box.appendChild(humidityDataElement);
