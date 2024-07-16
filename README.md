@@ -23,6 +23,10 @@ README.md
    - displayFiveDayWeathers() : Display 5 Day Forecast for the entered city after today
                                 Date, Weather Icon, Temp, Wind and Humidity.
 
+** Submitted URLs:
+   - https://twkim6440.github.io/challenge-6/
+   - https://github.com/twkim6440/challenge-6
+
 ** Comments:
  * Due to my travel to Korea and China, I just finished Challenge-6.
  * I believe the purpose of this challenge is to familiarize oneself with the APIs available out there.
