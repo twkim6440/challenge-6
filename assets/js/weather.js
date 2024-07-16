@@ -7,15 +7,14 @@ const oneDayWeatherCity = document.querySelector('#one-day-weather');
 const fieDayWeatherCity = document.querySelector('#five-day-weather');
 const cityArray = JSON.parse(localStorage.getItem('cityName')) || [];
 
+// Accept User Input
 const formSubmitHandler = function (event) {
   event.preventDefault();
   const cityName = nameInputEl.value.trim();
 
   if (cityName) {
-
     displayCities(cityArray, cityName);
     displayFiveDayWeathers(cityArray, cityName);
-    // nameInputEl.value = '';
   } else {
     alert('Please enter a cityName');
   }
@@ -23,79 +22,47 @@ const formSubmitHandler = function (event) {
   const newCityName = cityName;
   cityArray.push(newCityName);
   localStorage.setItem('cityName', JSON.stringify(cityArray));
-  // nameInputEl.value = '';
-
+  nameInputEl.value = '';
 };
 
-const buttonClickHandler = function (event) {
-  // const language = event.target.getAttribute('button');
-
-  // if (button) {
-  //   getFeaturedRepos(button);
-
-  //   cityContainerEl.textContent = '';
-  // }
-};
-
-const getFeaturedRepos = function (language) {
-  const apiUrl = `https://api.github.com/search/repositories?q=${language}+is:featured&sort=help-wanted-issues`;
-
-  fetch(apiUrl).then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        displayRepos(data.items, language);
-      });
-    } else {
-      alert(`Error:${response.statusText}`);
-    }
-  });
-};
-
+// Display the cities, user has entered, so far. 
 const displayCities = function (cityArray, cityName) {
-  // if (cityArray.length === 0) {
-  //   oneDayCityWeatherContainerEl.textContent = 'No repositories found.';
-  //   return;
-  // }
   const cityNameEl = document.createElement('button');
-  cityNameEl.classList = 'list-item flex-row justify-center';
   const cityTitleEl = document.createElement('span');
+  cityNameEl.classList = 'list-item flex-row justify-center';
+  cityNameEl.style.width = '100%';
+
   cityTitleEl.textContent = cityName;
   cityNameEl.addEventListener('click', function(event){
+
   displayOneDayWeather(cityArray, cityName);
   displayFiveDayWeathers(cityArray, cityName);
+
   let currentCity = event.target.innerHTML;
   displayOneDayWeather(cityArray, currentCity);
   displayFiveDayWeathers(cityArray, currentCity);
   }) 
 
   cityNameEl.appendChild(cityTitleEl);
-
-  // console.log(cityNameEl);
   cityContainerEl.appendChild(cityNameEl);
+
   displayOneDayWeather(cityArray, cityName);
   displayFiveDayWeathers(cityArray, cityName);
 };
 
 // 1 Day Weather Data for the entered city: City Name, Date, Weather Icon, Temp, Wind and Humidity.
 const displayOneDayWeather = function (cityArray, cityName) {
-  // if (cityArray.length === 0) {
-  //   oneDayWeatherCity.textContent = 'No repositories found.';
-  //   return;
-  // }
 
   oneDayCityWeatherContainerEl.innerHTML = "";
   const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
   let tmpCityName = cityName;
   const apiDataUrl = `https://api.openweathermap.org/data/2.5/weather?q=${tmpCityName}&appid=${apiKey}&units=imperial`;
-  // const cityLatLonUrl = `http://api.openweathermap.org/geo/1.0/direct?q=Seoul&limit=5&appid=765e5437056c425c7ec2a06e41de5624`;
 
   fetch(apiDataUrl)
     .then(function (response) {
       if (response.ok) {
         response.json()
         .then(function (fetchedData) {
-
-          // alert('chk1...! Fetched Data.Name:   '+fetchedData.name);
           const oneDayContainer = document.getElementById('one-day-weather-container');
           oneDayContainer.innerHTML = "";
           const tmpIcon = document.getElementById('icon-container');
@@ -153,18 +120,11 @@ const displayOneDayWeather = function (cityArray, cityName) {
     .catch(function (error) {
       alert('Unable to connect to Open Weather Map');
     }
-
   );
-
 };
 
 // 5 Day Forecast for the entered city after today: Date, Weather Icon, Temp, Wind and Humidity.
 const displayFiveDayWeathers = function (cityArray, cityName) {
-  // if (cityArray.length === 0) {
-  //   fiveDayWeatherCity.textContent = 'No repositories found.';
-  //   return;
-  // }
-  // fiveDayCityWeatherContainerEl.innerHTML = "";
   const apiKey = 'ecf8cbf60d320509daea3c498aa4334b';
   let tmpCityName = cityName;
   const apiForecastDataUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${tmpCityName}&appid=${apiKey}&units=imperial`;
@@ -243,9 +203,7 @@ const displayFiveDayWeathers = function (cityArray, cityName) {
     .catch(function (error) {
       alert('Unable to connect to Open Weather Map');
     }
-
   )
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
-// languageButtonsEl.addEventListener('click', buttonClickHandler);
